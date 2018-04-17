@@ -31,8 +31,8 @@ def question(request):
             @bot.register()
             def auto_reply(msg):
                 for question in questions:
-                if isinstance(msg.chat, Friend) & question.content==msg.text:
-                    return ' {} '.format(msg.text)
+                    if isinstance(msg.chat, Friend) & question.content==msg.text:
+                        return ' {} '.format(msg.text)
     
 
 
