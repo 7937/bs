@@ -21,15 +21,18 @@ def question(request):
     context['auto'] = auto
     return render_to_response('question.html',context)
 
-    if auto:   
-        @bot.register()
-        def reply_my_friend(msg):
-            tuling.do_reply(msg)
 
-    @bot.register()
-    def auto_reply(msg):
-        for question in questions:
-            if isinstance(msg.chat, Friend) & question.content==msg.text:
-                return ' {} '.format(msg.text)
+    for a in auto:
+        if a.auto == True:
+            @bot.register()
+            def reply_my_friend(msg):
+                tuling.do_reply(msg)
+        else:
+            @bot.register()
+            def auto_reply(msg):
+                for question in questions:
+                if isinstance(msg.chat, Friend) & question.content==msg.text:
+                    return ' {} '.format(msg.text)
+    
 
 
