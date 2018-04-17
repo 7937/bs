@@ -5,13 +5,11 @@
     <title>我的机器人</title>
 </head>
 <body>
-    <div>
-        <h3>登录</h3>
-    </div>
-    <hr>
+    
+    <img src="/static/img/qr.png" width="104" height="142" />
     {% for question in questions %}
         <h3>{{ question.content }}</h3>
-        <p>{{ question.answer }}</p>
+        <p>{{ question.answer|truncatechars: 30 }}</p>
     {% endfor %}
 </body>
 </html>
