@@ -6,11 +6,11 @@
 </head>
 <body>
     <img src="/static/img/qr.png" width="300" height="300" />
-    扫描上面二维码登录
+    <p> 扫描上面二维码登录 </p>
     <hr>
     {% for question in questions %}
-        <h3>{{ question.content }}</h3>
-        <p>{{ question.answer|truncatechars:30 }}</p>
+        <h3> 问题： {{ question.content }}</h3>
+        <p> 回答： {{ question.answer|truncatechars:30 }}</p>
     {% endfor %}
 </body>
 </html>
