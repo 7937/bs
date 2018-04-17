@@ -19,9 +19,16 @@ def question(request):
     context['questions'] = questions
     return render_to_response('question.html',context)
 
-@bot.register()
-def auto_reply(msg):
-    questions = Question.objects.all()
-    for question in questions:
-        if isinstance(msg.chat, Friend) & question.content==msg.text:
-            return ' {} '.format(msg.text)
+    check_box_list = request.POST.getlist('check_box_list') 
+    if check_box_list:
+        @bot.register()
+        def reply_my_friend(msg):
+            tuling.do_reply(msg)
+
+    @bot.register()
+    def auto_reply(msg):
+        for question in questions:
+            if isinstance(msg.chat, Friend) & question.content==msg.text:
+                return ' {} '.format(msg.text)
+
+

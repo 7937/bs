@@ -8,6 +8,12 @@
     <img src="/static/img/qr.png" width="300" height="300" />
     <p> 扫描上面二维码登录 </p>
     <hr>
+
+    <form action="" method="POST">             
+        <input type="checkbox" value="3" name="check_box_list"/>是否使用图灵机器人       
+        <input type="submit" value="提交"/> 
+    </form> 
+
     {% for question in questions %}
         <h3> 问题： {{ question.content }}</h3>
         <p> 回答： {{ question.answer|truncatechars:30 }}</p>
