@@ -1,10 +1,9 @@
 # coding:utf-8
-from .models import Question
+from .models import Question,AutoReply
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
 from wxpy import *
 import time
-
 
 def question(request):
     try:
@@ -15,12 +14,14 @@ def question(request):
     time.sleep(3)
 
     questions = Question.objects.all()
+    auto = AutoReply.objects.get(id=1)
+    
     context = {}
     context['questions'] = questions
+    context['auto'] = auto
     return render_to_response('question.html',context)
 
-    check_box_list = request.POST.getlist('check_box_list') 
-    if check_box_list:
+    if auto:   
         @bot.register()
         def reply_my_friend(msg):
             tuling.do_reply(msg)
