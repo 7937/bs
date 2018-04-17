@@ -7,10 +7,21 @@ import time
 
 
 def question(request):
-    bot = Bot(cache_path=True,qr_path=/static/qr.png)
+    try:
+        bot = Bot(cache_path=True,qr_path="../static/img/qr.png")
+    except Exception,e:
+        print e
+
     time.sleep(3)
-    
+
     questions = Question.objects.all()
     context = {}
     context['questions'] = questions
     return render_to_response('question.html',context)
+
+@bot.register()
+def auto_reply(msg):
+    questions = Question.objects.all()
+    for question in questions:
+        if isinstance(msg.chat, Friend) & question.content==msg.text:
+            return ' {} '.format(msg.text)
