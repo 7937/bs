@@ -11,10 +11,10 @@ def question(request):
     except Exception,e:
         print e
 
-    time.sleep(3)
+    time.sleep(2)
 
     questions = Question.objects.all()
-    auto = AutoReply.objects.get(id=1)
+    auto = AutoReply.objects.all()
     
     context = {}
     context['questions'] = questions

@@ -8,7 +8,10 @@
     <img src="/static/img/qr.png" width="300" height="300" />
     <p> 扫描上面二维码登录 </p>
     <hr>
-    <p>是否自动回复，0为否，1为是，默认为否：{{ auto }}</p>
+    {% for a in auto %}
+        <p>是否自动回复：{{ a.auto }}</p>
+    {% endfor %}
+    <hr>
     {% for question in questions %}
         <h3> 问题： {{ question.content }}</h3>
         <p> 回答： {{ question.answer|truncatechars:30 }}</p>
