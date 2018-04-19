@@ -15,3 +15,10 @@ class AutoReplyAdmin(admin.ModelAdmin):
     list_display = ("auto",)
 
 admin.site.register(AutoReply,AutoReplyAdmin)
+
+from .models import Timer
+class TimerAdmin(admin.ModelAdmin):
+    list_display = ("id","receiver","time","content","recycle",)
+    ordering = ("id",)    
+    
+admin.site.register(Timer,TimerAdmin)

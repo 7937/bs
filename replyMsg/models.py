@@ -8,3 +8,9 @@ class Question(models.Model):
 
 class AutoReply(models.Model):
     auto = models.BooleanField()
+
+class Timer(models.Model):
+    receiver = models.CharField(max_length=200)
+    time = models.DateTimeField('定时时间',default = timezone.now)
+    recycle = models.IntegerField(default = 0)
+    content = models.CharField(max_length=200s)
