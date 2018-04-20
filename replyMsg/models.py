@@ -11,6 +11,6 @@ class AutoReply(models.Model):
 
 class Timer(models.Model):
     receiver = models.CharField(max_length=200)
-    time = models.DateTimeField('定时时间',default = timezone.now)
+    time = models.DateTimeField()
     recycle = models.IntegerField(default = 0)
-    content = models.CharField(max_length=200s)
+    content = models.CharField(max_length=200)

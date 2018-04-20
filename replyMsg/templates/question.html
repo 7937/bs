@@ -19,7 +19,7 @@
     {% endfor %}
     <hr>
     {% for timer in timers %}
-        <p>定时{{timer.time}}给：{{timer.receiver}} 发送：{{timer.content}}。重复时间：{{timer.recycle}} 天</p>
+        <p> <b> 定时: </b> {{timer.time}} <b> 给: </b> {{timer.receiver}} <b> 发送: </b> {{timer.content}}。 <b> 重复时间每 </b> {{timer.recycle}} <b> 天 </b> </p>
     {% endfor %}
 </body>
 </html>
