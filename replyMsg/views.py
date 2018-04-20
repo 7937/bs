@@ -46,23 +46,24 @@ def question(request):
     return render_to_response('question.html',context)  
 
 
-def sendMsgOnTime(timers):
-    for sched_time in timers:
-        flag = 0
-        while True:
-            sched_time.receiver = u''.join(sched_time.receiver)
-            now = timezone.now() + datetime.timedelta(hours = 8)
-            if now.strftime('%Y-%m-%d %H:%M') == sched_time.time.strftime('%Y-%m-%d %H:%M'):
-	        friend = bot.friends().search(sched_time.receiver)[0]
-    	        friend.send(sched_time.content)
-                flag = 1
-		time.sleep(60)
-            else:
-                if flag == 1:
-                    sched_time.time = sched_time.time + datetime.timedelta(days = sched_time.recycle)
-                    flag = 0
+def sendMsgOnTime(sched_time):
+    flag = 0
+    while True:
+        sched_time.receiver = u''.join(sched_time.receiver)
+        now = timezone.now() + datetime.timedelta(hours = 8)
+        if now.strftime('%Y-%m-%d %H:%M') == sched_time.time.strftime('%Y-%m-%d %H:%M'):
+            friend = bot.friends().search(sched_time.receiver)[0]
+	        friend.send(sched_time.content)
+            flag = 1
+            time.sleep(60)
+        else:
+            if flag == 1:
+                sched_time.time = sched_time.time + datetime.timedelta(seconds = sched_time.recycle)
+                flag = 0
     return    
 
 if __name__ == "__main__":
-    th = threading.Thread(sendMsgOnTime(timers))
-    th.start()
+    timers = Timer.objects.all()
+    for sched_time in timers:
+        t = threading.Thread(sendMsgOnTime(sched_time))
+        t.start()
