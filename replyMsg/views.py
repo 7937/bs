@@ -13,6 +13,7 @@ def login_c():
     print "login in"
 
 def question(request):
+    print "question"
     #bot = Bot(cache_path=True,qr_path="../static/img/qr.png",login_callback=login_c)
     global bot
     bot = Bot(cache_path=True,console_qr=True)
@@ -29,6 +30,10 @@ def question(request):
     context['auto'] = auto
     context['timers'] = timers
 
+    for sched_time in timers:
+        t = sendMsgInTime(sched_time)
+        t.start()
+
     for a in auto:
         if a.auto == True:
             @bot.register()
@@ -39,31 +44,29 @@ def question(request):
             def auto_reply(msg):
                 for question in questions:
                     if msg.type != TEXT:
-                        return '打字给我看吧 (・ˍ・) '
+                        return u'打字给我看吧 (・ˍ・) '
                     elif int(isinstance(msg.chat, Friend)) & int(question.content==msg.text):
                         return question.answer
                     
     return render_to_response('question.html',context)  
 
 
-def sendMsgOnTime(sched_time):
-    flag = 0
-    while True:
-        sched_time.receiver = u''.join(sched_time.receiver)
-        now = timezone.now() + datetime.timedelta(hours = 8)
-        if now.strftime('%Y-%m-%d %H:%M') == sched_time.time.strftime('%Y-%m-%d %H:%M'):
-            friend = bot.friends().search(sched_time.receiver)[0]
-	        friend.send(sched_time.content)
-            flag = 1
-            time.sleep(60)
-        else:
-            if flag == 1:
-                sched_time.time = sched_time.time + datetime.timedelta(seconds = sched_time.recycle)
-                flag = 0
-    return    
+class sendMsgInTime(threading.Thread):
+    def __init__(self,sched_time):
+        self.sched_time = sched_time
+        threading.Thread.__init__(self)
 
-if __name__ == "__main__":
-    timers = Timer.objects.all()
-    for sched_time in timers:
-        t = threading.Thread(sendMsgOnTime(sched_time))
-        t.start()
+    def run(self):
+        flag = 0
+        while True:
+            self.sched_time.receiver = u''.join(self.sched_time.receiver)
+            now = timezone.now() + datetime.timedelta(hours = 8)
+            if now.strftime('%Y-%m-%d %H:%M') == self.sched_time.time.strftime('%Y-%m-%d %H:%M'):
+                friend = bot.friends().search(self.sched_time.receiver)[0]
+                friend.send(self.sched_time.content)
+                flag = 1
+                time.sleep(60)
+            else:
+                if flag == 1:
+                    self.sched_time.time = self.sched_time.time + datetime.timedelta(days = self.sched_time.recycle)
+                    flag = 0
