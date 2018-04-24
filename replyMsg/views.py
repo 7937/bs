@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
 from django.utils import timezone
 from wxpy import *
-import time,datetime
+import time,datetime,os
 import itchat
 import logging
 import threading
@@ -76,3 +76,14 @@ def mutualFriends():
     bot2 = Bot()
     for mf in mutual_friends(bot1, bot2):
         print(mf)
+
+def upload_file(request):
+    if request.method == "POST":
+        myFile = request.FILES.get("myfile",None)
+        if not myFile:
+            return HttpResponse("no files for upload")
+        destination = open(os.path.join("/data/robot/static/file",myFile.name),'wb+')
+        for chunk in myFile.chunks():
+            destination.write(chunk)
+        destination.close()
+        return HttpResponse("upload over!")
