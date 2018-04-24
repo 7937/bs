@@ -13,14 +13,18 @@
         <p>是否自动回复：{{ a.auto }}</p>
     {% endfor %}
     <hr>
+    <h3> 自定义问题：</h3>
     {% for question in questions %}
-        <h3> 问题： {{ question.content }}</h3>
+        <p> 问题： {{ question.content }}</p>
         <p> 回答： {{ question.answer|truncatechars:30 }}</p>
     {% endfor %}
     <hr>
+    <h3> 定时任务：</h3>
     {% for timer in timers %}
         <p> <b> 定时: </b> {{timer.time}} <b> 给: </b> {{timer.receiver}} <b> 发送: </b> {{timer.content}}。 <b> 重复时间每 </b> {{timer.recycle}} <b> 天 </b> </p>
     {% endfor %}
+    <hr>
+    <a href="/mutualFriends"> 查找共同好友 </a>
 </body>
 </html>
 

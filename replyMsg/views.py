@@ -13,7 +13,6 @@ def login_c():
     print "login in"
 
 def question(request):
-    print "question"
     #bot = Bot(cache_path=True,qr_path="../static/img/qr.png",login_callback=login_c)
     global bot
     bot = Bot(cache_path=True,console_qr=True)
@@ -70,3 +69,10 @@ class sendMsgInTime(threading.Thread):
                 if flag == 1:
                     self.sched_time.time = self.sched_time.time + datetime.timedelta(days = self.sched_time.recycle)
                     flag = 0
+
+
+def mutualFriends():
+    bot1 = Bot()
+    bot2 = Bot()
+    for mf in mutual_friends(bot1, bot2):
+        print(mf)

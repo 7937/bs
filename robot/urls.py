@@ -19,5 +19,6 @@ from replyMsg.views import question
 
 urlpatterns = [
     url(r'^$',include('replyMsg.urls')),
+    url(r'^mutualFriends/',include('replyMsg.urls')),
     url(r'^admin/', admin.site.urls),
 ]
