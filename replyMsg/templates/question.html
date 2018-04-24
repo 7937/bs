@@ -10,27 +10,30 @@
     <hr>
 -->
     {% for a in auto %}
-        <p>是否自动回复：{{ a.auto }}</p>
+        <h4>是否自动回复：{{ a.auto }}</h4>
     {% endfor %}
     <hr>
 
-    <h3> 自定义问题：</h3>
+    <h4> 自定义问题：</h4>
     {% for question in questions %}
         <p> 问题： {{ question.content }}</p>
         <p> 回答： {{ question.answer|truncatechars:30 }}</p>
     {% endfor %}
     <hr>
     
-    <h3> 定时任务：</h3>
+    <h4> 定时任务：(测试给自己发无效，可以给<I> 文件助手 </I>发) </h4>
     {% for timer in timers %}
         <p> <b> 定时: </b> {{timer.time}} <b> 给: </b> {{timer.receiver}} <b> 发送: </b> {{timer.content}}。 <b> 重复时间每 </b> {{timer.recycle}} <b> 天 </b> </p>
     {% endfor %}
     <hr>
-    
-    <form enctype="multipart/form-data" action="" method="POST">
-        <input type="file" name="myfile" />
+
+    <h4> 收到“文件”时，回复最近一次上传文件，仅英文名文件有效 </h4>   
+    <form enctype="multipart/form-data" action="/upload_file/" method="POST">	
+	<input type="file" name="myfile" />
         <br/>
         <input type="submit" value="upload" />
+	<p> {{ upload }} </p>
+        <p> {{ done }} </p>
     </form>
     <hr>
     

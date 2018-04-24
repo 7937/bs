@@ -23,11 +23,13 @@ def question(request):
     questions = Question.objects.all()
     auto = AutoReply.objects.all()
     timers = Timer.objects.all()
-
+     
+    global context
     context = {}
     context['questions'] = questions
     context['auto'] = auto
     context['timers'] = timers
+    context['upload'] = 'upload unfinished !'
 
     for sched_time in timers:
         t = sendMsgInTime(sched_time)
@@ -42,10 +44,14 @@ def question(request):
             @bot.register()
             def auto_reply(msg):
                 for question in questions:
-                    if msg.type != TEXT:
+                    if int(isinstance(msg.chat, Friend)) & int(msg.type != TEXT):
                         return u'打字给我看吧 (・ˍ・) '
                     elif int(isinstance(msg.chat, Friend)) & int(question.content==msg.text):
                         return question.answer
+		    elif int(isinstance(msg.chat, Friend)) & int(msg.text==u'文件'):
+			file_path = u'/data/robot/static/file/' + myFile_name
+			print file_path
+			msg.reply_file(path=file_path)	
                     
     return render_to_response('question.html',context)  
 
@@ -61,8 +67,11 @@ class sendMsgInTime(threading.Thread):
             self.sched_time.receiver = u''.join(self.sched_time.receiver)
             now = timezone.now() + datetime.timedelta(hours = 8)
             if now.strftime('%Y-%m-%d %H:%M') == self.sched_time.time.strftime('%Y-%m-%d %H:%M'):
-                friend = bot.friends().search(self.sched_time.receiver)[0]
-                friend.send(self.sched_time.content)
+		if self.sched_time.receiver==u'文件助手':
+		    bot.file_helper.send(self.sched_time.content)
+		else:
+                    friend = bot.friends().search(self.sched_time.receiver)[0]
+                    friend.send(self.sched_time.content)
                 flag = 1
                 time.sleep(60)
             else:
@@ -77,13 +86,25 @@ def mutualFriends():
     for mf in mutual_friends(bot1, bot2):
         print(mf)
 
+
 def upload_file(request):
     if request.method == "POST":
         myFile = request.FILES.get("myfile",None)
-        if not myFile:
+        global myFile_name
+	myFile_name = ''
+	myFile_name = myFile.name
+	print myFile_name
+        if myFile:
+            destination = open(os.path.join("/data/robot/static/file",myFile.name),'wb+')
+            print "输出终点"
+            print destination
+            for chunk in myFile.chunks():
+                destination.write(chunk)
+                print "写入中"
+            print "写入完成"
+            destination.close()
+            print "关闭完成"
+    	    context['upload'] = 'upload done !'
+	    return render_to_response('question.html',context)
+        else:
             return HttpResponse("no files for upload")
-        destination = open(os.path.join("/data/robot/static/file",myFile.name),'wb+')
-        for chunk in myFile.chunks():
-            destination.write(chunk)
-        destination.close()
-        return HttpResponse("upload over!")

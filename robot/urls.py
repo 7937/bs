@@ -16,9 +16,11 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from replyMsg.views import question
+from replyMsg.views import upload_file
 
 urlpatterns = [
     url(r'^$',include('replyMsg.urls')),
     url(r'^mutualFriends/',include('replyMsg.urls')),
+    url(r'^upload_file/$', upload_file),
     url(r'^admin/', admin.site.urls),
 ]
